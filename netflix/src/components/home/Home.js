@@ -1,45 +1,30 @@
-
-import { useEffect, useState } from 'react'
-
-import MoviesList from './MoviesList';
+import { useEffect, useState } from 'react';
+import MovieList from '../movielist/MovieList.js'
+import './Home.css';
 
 function Home() {
+    const [movieData, setMovieData] = useState([])
 
-    const [moviesdata, setMoviesData] = useState([])
+    const getAllMovie = () => {
 
-    const getAllMovies = () => {
-        const serverURL = `http://localhost:3005/trending`;
+        const serverURL = `${process.env.REACT_APP_serverURL}/trending`;
+        console.log(serverURL);
 
-        // using axios
-        // axios.get(serverURL)
-        // .then(response=>{
-        //     console.log(response.data)
-        // })
-        // .catch((error)=>{
-        //     console.log(error)
-        // })
-
-        // using fetch
         fetch(serverURL)
             .then(response => {
-                response.json().then(data => {
-                    console.log(data)
-                    setMoviesData(data)
+                response.json()
+                .then(data => {
+                    setMovieData(data)
 
                 })
             })
     }
-
-    useEffect(()=>{
-        getAllMovies()
-    },[])
-
-
-    return (
-        <>
-         <MoviesList moviesdata={moviesdata}></MoviesList>  
-        </>
-    )
+    useEffect(() => {
+        getAllMovie()
+    }, [])
+    return (<>
+        
+        <MovieList  movieData={movieData}/>
+    </>)
 }
-
-export default Home;
+export default Home
